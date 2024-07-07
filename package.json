@@ -1,0 +1,39 @@
+{
+  "name": "shape-drawer-ui",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "keywords": [
+    ""
+  ],
+  "license": "",
+  "author": "ttsukasan",
+  "scripts": {
+    "build:lib": "esbuild ./lib/*.ts --bundle --minify --outdir=js/vendor/minified",
+    "watch:lib": "chokidar './lib/*.ts' -c 'npm run build:lib'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open --config webpack.config.dev.js",
+    "build": "npm run build:lib && webpack --config webpack.config.prod.js"
+  },
+  "devDependencies": {
+    "@types/terser": "^3.12.0",
+    "autoprefixer": "^10.4.19",
+    "copy-webpack-plugin": "^11.0.0",
+    "daisyui": "^4.12.10",
+    "esbuild": "^0.21.5",
+    "html-webpack-plugin": "^5.6.0",
+    "postcss": "^8.4.39",
+    "postcss-loader": "^8.1.1",
+    "tailwindcss": "^3.4.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.2",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-merge": "^5.10.0"
+  },
+  "dependencies": {
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0"
+  }
+}
