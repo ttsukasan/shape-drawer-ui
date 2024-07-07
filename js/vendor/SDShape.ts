@@ -1,8 +1,8 @@
 export abstract class SDShape {
   shapeId: number;
-  element: HTMLElement | null = null;
-  resizeHandle: HTMLElement | null = null;
-  deleteButton: HTMLElement | null = null;
+  element: HTMLElement;
+  resizeHandle: HTMLElement;
+  deleteButton: HTMLElement;
   isInteracting: boolean = false;
   isDragging: boolean = false;
   isResizing: boolean = false;
@@ -21,20 +21,14 @@ export abstract class SDShape {
 
   constructor(shapeId: number) {
     this.shapeId = shapeId;
-    this.init();
+    this.element = this.createElement();
+    this.resizeHandle = this.createResizeHandle();
+    this.deleteButton = this.createDeleteButton();
+    document.body.prepend(this.element);
+    this.attachEvents();
   }
 
-  init() {
-    this.createElement();
-    if (this.element) {
-      document.body.prepend(this.element);
-      this.attachEvents();
-    }
-    this.boundResize = null;
-    this.boundStopResize = null;
-  }
-
-  abstract createElement(): void;
+  abstract createElement(): HTMLElement;
 
   updateElementStyle() {
     if (!this.element) return;
@@ -53,9 +47,9 @@ export abstract class SDShape {
     });
   }
 
-  createDeleteButton() {
-    this.deleteButton = document.createElement('div');
-    Object.assign(this.deleteButton.style, {
+  createDeleteButton(): HTMLElement {
+    const button = document.createElement('div');
+    Object.assign(button.style, {
       position: 'absolute',
       top: '0',
       right: '0',
@@ -72,15 +66,15 @@ export abstract class SDShape {
       fontSize: '24px',
       fontFamily: this.fontFamily,
     });
-    this.deleteButton.textContent = '×';
-    this.deleteButton.addEventListener('click', () => {
-      this.deleteElement();
-    });
+    button.textContent = '×';
+    button.addEventListener('click', () => this.deleteElement());
+    this.element.appendChild(button);
+    return button;
   }
 
-  createResizeHandle() {
-    this.resizeHandle = document.createElement('div');
-    Object.assign(this.resizeHandle.style, {
+  createResizeHandle(): HTMLElement {
+    const handle = document.createElement('div');
+    Object.assign(handle.style, {
       position: 'absolute',
       width: '20px',
       height: '20px',
@@ -90,10 +84,9 @@ export abstract class SDShape {
       cursor: 'nwse-resize',
       visibility: 'hidden',
     });
-    if (this.element) {
-      this.element.appendChild(this.resizeHandle);
-      this.resizeHandle.addEventListener('mousedown', (e: MouseEvent) => this.initResize(e));
-    }
+    handle.addEventListener('mousedown', (e: MouseEvent) => this.initResize(e));
+    this.element.appendChild(handle);
+    return handle;
   }
 
   initResize(e: MouseEvent) {
@@ -105,9 +98,7 @@ export abstract class SDShape {
     this.boundStopResize = this.stopResize.bind(this);
     document.addEventListener('mousemove', this.boundResize);
     document.addEventListener('mouseup', this.boundStopResize);
-    if (this.resizeHandle) {
-      this.resizeHandle.style.visibility = 'visible';
-    }
+    this.resizeHandle.style.visibility = 'visible';
   }
 
   resize(e: MouseEvent) {
@@ -119,9 +110,7 @@ export abstract class SDShape {
       this.isInteracting = true;
       this.updateElementStyle();
       this.updateContentStyle();
-      if (this.deleteButton) {
-        this.deleteButton.style.visibility = this.height < 40 ? 'hidden' : 'visible';
-      }
+      this.deleteButton.style.visibility = this.height < 40 ? 'hidden' : 'visible';
       this.mouseX = e.clientX;
       this.mouseY = e.clientY;
     }
@@ -139,24 +128,22 @@ export abstract class SDShape {
     }
   }
 
-  setElementPositionToTopLeft() {
-    if (!this.element) return;
+  setElementPositionToTopLeft(element: HTMLElement) {
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
-    this.element.style.left = `${scrollX + 100 + (this.shapeId - 1) * 15}px`;
-    this.element.style.top = `${scrollY + 80 + (this.shapeId - 1) * 15}px`;
+    element.style.left = `${scrollX + 100 + (this.shapeId - 1) * 15}px`;
+    element.style.top = `${scrollY + 80 + (this.shapeId - 1) * 15}px`;
   }
 
   attachEvents() {
-    if (!this.element) return;
     this.element.addEventListener('mousedown', (e: MouseEvent) => {
       if (this.shouldIgnoreClick(e)) return;
       e.preventDefault();
-      const rect = this.element!.getBoundingClientRect();
+      const rect = this.element.getBoundingClientRect();
       this.offsetX = e.clientX - rect.left;
       this.offsetY = e.clientY - rect.top;
       this.isDragging = true;
-      this.element!.style.opacity = '0.8';
+      this.element.style.opacity = '0.8';
     });
 
     document.addEventListener('mousemove', (e: MouseEvent) => {
@@ -164,15 +151,15 @@ export abstract class SDShape {
         e.preventDefault();
         const x = e.clientX - this.offsetX + window.scrollX;
         const y = e.clientY - this.offsetY + window.scrollY;
-        this.element!.style.left = `${x}px`;
-        this.element!.style.top = `${y}px`;
+        this.element.style.left = `${x}px`;
+        this.element.style.top = `${y}px`;
       }
     });
 
     document.addEventListener('mouseup', () => {
       if (this.isDragging) {
         this.isDragging = false;
-        this.element!.style.opacity = '1';
+        this.element.style.opacity = '1';
       }
     });
 
@@ -180,10 +167,8 @@ export abstract class SDShape {
       this.isInteracting = true;
       this.updateElementStyle();
       this.updateContentStyle();
-      if (this.resizeHandle) {
-        this.resizeHandle.style.visibility = 'visible';
-      }
-      if (this.height >= 40 && this.deleteButton) {
+      this.resizeHandle.style.visibility = 'visible';
+      if (this.height >= 40) {
         this.deleteButton.style.visibility = 'visible';
       }
     });
@@ -192,19 +177,17 @@ export abstract class SDShape {
       this.isInteracting = false;
       this.updateElementStyle();
       this.updateContentStyle();
-      if (!this.isResizing && this.resizeHandle) {
+      if (!this.isResizing) {
         this.resizeHandle.style.visibility = 'hidden';
       }
-      if (this.deleteButton) {
-        this.deleteButton.style.visibility = 'hidden';
-      }
+      this.deleteButton.style.visibility = 'hidden';
     });
   }
 
   abstract updateContentStyle(): void;
 
   deleteElement() {
-    if (this.element && document.body.contains(this.element)) {
+    if (document.body.contains(this.element)) {
       document.body.removeChild(this.element);
     }
   }

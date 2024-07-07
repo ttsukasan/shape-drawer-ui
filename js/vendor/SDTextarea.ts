@@ -1,8 +1,8 @@
 import { SDShape } from './SDShape';
 
 export class SDTextarea extends SDShape {
-  textArea: HTMLTextAreaElement | null = null;
-  fontSizeToggle: HTMLElement | null = null;
+  textArea!: HTMLTextAreaElement;
+  fontSizeToggle!: HTMLElement;
   textColor: string = '#ec4899';
   fontSize: string = '18px';
 
@@ -10,27 +10,21 @@ export class SDTextarea extends SDShape {
     super(shapeId);
   }
 
-  createElement() {
-    this.element = document.createElement('div');
-    this.element.dataset.shapeId = this.shapeId.toString();
+  createElement(): HTMLElement {
+    const element = document.createElement('div');
+    element.dataset.shapeId = this.shapeId.toString();
     this.textArea = document.createElement('textarea');
     this.textArea.placeholder = 'テキストを入力';
-    this.setElementPositionToTopLeft();
+    this.setElementPositionToTopLeft(element);
     this.updateElementStyle();
     this.updateContentStyle();
-    if (this.element && this.textArea) {
-      this.element.appendChild(this.textArea);
-    }
-    this.createDeleteButton();
-    if (this.element && this.deleteButton) {
-      this.element.appendChild(this.deleteButton);
-    }
-    this.createResizeHandle();
-    this.createFontSizeToggle();
+    element.appendChild(this.textArea);
+    this.fontSizeToggle = this.createFontSizeToggle();
+    element.appendChild(this.fontSizeToggle);
+    return element;
   }
 
   updateContentStyle() {
-    if (!this.textArea) return;
     Object.assign(this.textArea.style, {
       color: this.textColor,
       resize: 'none',
@@ -54,10 +48,10 @@ export class SDTextarea extends SDShape {
     });
   }
 
-  createFontSizeToggle() {
-    this.fontSizeToggle = document.createElement('div');
-    this.fontSizeToggle.textContent = 'A';
-    Object.assign(this.fontSizeToggle.style, {
+  createFontSizeToggle(): HTMLElement {
+    const toggle = document.createElement('div');
+    toggle.textContent = 'A';
+    Object.assign(toggle.style, {
       position: 'absolute',
       bottom: '0',
       left: '0',
@@ -74,12 +68,8 @@ export class SDTextarea extends SDShape {
       fontSize: '16px',
       fontFamily: this.fontFamily,
     });
-    if (this.element && this.fontSizeToggle) {
-      this.element.appendChild(this.fontSizeToggle);
-    }
-    this.fontSizeToggle.addEventListener('click', () => {
-      this.toggleFontSize();
-    });
+    toggle.addEventListener('click', () => this.toggleFontSize());
+    return toggle;
   }
 
   toggleFontSize() {
@@ -88,10 +78,6 @@ export class SDTextarea extends SDShape {
   }
 
   protected shouldIgnoreClick(e: MouseEvent): boolean {
-    // FIXME: this.textAreaがnullの場合がある
-    if (!this.textArea) {
-      this.textArea = this.element!.querySelector('textarea');
-    }
     return e.target === this.textArea;
   }
 }
