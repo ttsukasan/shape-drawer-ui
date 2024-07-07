@@ -48,6 +48,7 @@ export abstract class SDShape {
       alignItems: 'normal',
       userSelect: 'none',
       border: this.isInteracting ? `1px solid ${this.accentColor}` : `1px solid transparent`,
+      transition: 'border .2s ease-in-out',
       boxSizing: 'border-box',
     });
   }
