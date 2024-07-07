@@ -22,16 +22,21 @@ export abstract class SDShape {
   constructor(shapeId: number) {
     this.shapeId = shapeId;
     this.element = this.createElement();
+    console.log('element', this.element)
     this.resizeHandle = this.createResizeHandle();
     this.deleteButton = this.createDeleteButton();
     document.body.prepend(this.element);
+    this.updateElementStyle();
+    this.updateContentStyle();
     this.attachEvents();
   }
 
   abstract createElement(): HTMLElement;
 
   updateElementStyle() {
-    if (!this.element) return;
+    if (!this.element) {
+      return;
+    }
     Object.assign(this.element.style, {
       width: `${this.width}px`,
       height: `${this.height}px`,

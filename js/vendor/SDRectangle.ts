@@ -12,8 +12,6 @@ export class SDRectangle extends SDShape {
     element.dataset.shapeId = this.shapeId.toString();
     this.shape = document.createElement('div');
     this.setElementPositionToTopLeft(element);
-    this.updateElementStyle();
-    this.updateContentStyle();
     element.appendChild(this.shape);
     return element;
   }

@@ -16,8 +16,6 @@ export class SDTextarea extends SDShape {
     this.textArea = document.createElement('textarea');
     this.textArea.placeholder = 'テキストを入力';
     this.setElementPositionToTopLeft(element);
-    this.updateElementStyle();
-    this.updateContentStyle();
     element.appendChild(this.textArea);
     this.fontSizeToggle = this.createFontSizeToggle();
     element.appendChild(this.fontSizeToggle);
@@ -34,8 +32,8 @@ export class SDTextarea extends SDShape {
       marginTop: '15px',
       marginLeft: '15px',
       border: this.isInteracting ? `1px dashed ${this.borderColor}` : `1px dashed transparent`,
-      borderRadius: '8px',
-      padding: '4px',
+      borderRadius: '4px',
+      padding: '5px',
       outline: 'none',
       overflow: 'hidden',
       fontSize: this.fontSize,
