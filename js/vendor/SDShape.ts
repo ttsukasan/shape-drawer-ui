@@ -1,44 +1,27 @@
 export abstract class SDShape {
   shapeId: number;
-  element: HTMLElement | null;
-  resizeHandle: HTMLElement | null;
-  deleteButton: HTMLElement | null;
-  isInteracting: boolean;
-  isDragging: boolean;
-  isResizing: boolean;
-  width: number;
-  height: number;
-  mouseX: number;
-  mouseY: number;
-  offsetX: number;
-  offsetY: number;
-  boundResize: ((e: MouseEvent) => void) | null;
-  boundStopResize: (() => void) | null;
-  borderColor: string;
-  accentColor: string;
-  handleGradient: string;
-  fontFamily: string;
+  element: HTMLElement | null = null;
+  resizeHandle: HTMLElement | null = null;
+  deleteButton: HTMLElement | null = null;
+  isInteracting: boolean = false;
+  isDragging: boolean = false;
+  isResizing: boolean = false;
+  width: number = 200;
+  height: number = 90;
+  mouseX: number = 0;
+  mouseY: number = 0;
+  offsetX: number = 0;
+  offsetY: number = 0;
+  boundResize: ((e: MouseEvent) => void) | null = null;
+  boundStopResize: (() => void) | null = null;
+  borderColor: string = '#ec4899';
+  accentColor: string = 'rgb(107, 114, 128)';
+  handleGradient: string = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`;
+  fontFamily: string = `"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif`;
 
   constructor(shapeId: number) {
     this.shapeId = shapeId;
-    this.element = null;
-    this.resizeHandle = null;
-    this.deleteButton = null;
-    this.isInteracting = false;
-    this.isDragging = false;
-    this.isResizing = false;
-    this.width = 200;
-    this.height = 90;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.boundResize = null;
-    this.boundStopResize = null;
-    this.borderColor = '#ec4899';
-    this.accentColor = 'rgb(107, 114, 128)';
-    this.handleGradient = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`;
-    this.fontFamily = `"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif`;
+    this.init();
   }
 
   init() {
@@ -107,12 +90,10 @@ export abstract class SDShape {
       cursor: 'nwse-resize',
       visibility: 'hidden',
     });
-    if (this.element && this.resizeHandle) {
+    if (this.element) {
       this.element.appendChild(this.resizeHandle);
+      this.resizeHandle.addEventListener('mousedown', (e: MouseEvent) => this.initResize(e));
     }
-    this.resizeHandle.addEventListener('mousedown', (e: MouseEvent) => {
-      this.initResize(e);
-    });
   }
 
   initResize(e: MouseEvent) {
@@ -169,6 +150,7 @@ export abstract class SDShape {
   attachEvents() {
     if (!this.element) return;
     this.element.addEventListener('mousedown', (e: MouseEvent) => {
+      if (this.shouldIgnoreClick(e)) return;
       e.preventDefault();
       const rect = this.element!.getBoundingClientRect();
       this.offsetX = e.clientX - rect.left;
@@ -225,5 +207,9 @@ export abstract class SDShape {
     if (this.element && document.body.contains(this.element)) {
       document.body.removeChild(this.element);
     }
+  }
+
+  protected shouldIgnoreClick(e: MouseEvent): boolean {
+    return false;
   }
 }

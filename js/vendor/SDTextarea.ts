@@ -1,18 +1,13 @@
 import { SDShape } from './SDShape';
 
 export class SDTextarea extends SDShape {
-  textArea: HTMLTextAreaElement | null;
-  fontSizeToggle: HTMLElement | null;
-  textColor: string;
-  fontSize: string;
+  textArea: HTMLTextAreaElement | null = null;
+  fontSizeToggle: HTMLElement | null = null;
+  textColor: string = '#ec4899';
+  fontSize: string = '18px';
 
   constructor(shapeId: number) {
     super(shapeId);
-    this.textArea = null;
-    this.fontSizeToggle = null;
-    this.textColor = '#ec4899';
-    this.fontSize = '18px';
-    this.init();
   }
 
   createElement() {
@@ -90,5 +85,13 @@ export class SDTextarea extends SDShape {
   toggleFontSize() {
     this.fontSize = this.fontSize === '18px' ? '36px' : '18px';
     this.updateContentStyle();
+  }
+
+  protected shouldIgnoreClick(e: MouseEvent): boolean {
+    // FIXME: this.textAreaがnullの場合がある
+    if (!this.textArea) {
+      this.textArea = this.element!.querySelector('textarea');
+    }
+    return e.target === this.textArea;
   }
 }

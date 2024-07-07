@@ -1,18 +1,17 @@
 import { SDShape } from './SDShape';
 
 export class SDRectangle extends SDShape {
-  shape: HTMLElement | null;
+  shape: HTMLElement | null = null;
 
   constructor(shapeId: number) {
     super(shapeId);
-    this.shape = null;
-    this.init();
   }
 
   createElement() {
     this.element = document.createElement('div');
     this.element.dataset.shapeId = this.shapeId.toString();
     this.shape = document.createElement('div');
+    this.shape.dataset.type = 'rectangle';
     this.setElementPositionToTopLeft();
     this.updateElementStyle();
     this.updateContentStyle();
@@ -27,6 +26,7 @@ export class SDRectangle extends SDShape {
   }
 
   updateContentStyle() {
+    this.shape ||= this.element?.querySelector(`[data-type="rectangle"]`) as HTMLElement;
     if (!this.shape) return;
     Object.assign(this.shape.style, {
       boxSizing: 'border-box',
