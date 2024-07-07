@@ -66,7 +66,12 @@ export abstract class SDShape {
       fontSize: '24px',
       fontFamily: this.fontFamily,
     });
-    button.textContent = '×';
+    // button.textContent = '×';
+    const label = document.createElement('div')
+    label.textContent = '×' // '✖'
+    label.style.marginTop = '-6px'
+    label.style.marginRight = '-1px'
+    button.appendChild(label);
     button.addEventListener('click', () => this.deleteElement());
     this.element.appendChild(button);
     return button;
