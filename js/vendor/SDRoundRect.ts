@@ -1,4 +1,4 @@
-import { SDShape } from './SDShape';
+import {SDShape} from './SDShape';
 
 export class SDRoundRect extends SDShape {
   shape!: HTMLElement;
@@ -7,13 +7,9 @@ export class SDRoundRect extends SDShape {
     super(shapeId, color)
   }
 
-  createElement(): HTMLElement {
-    const element = document.createElement('div');
-    element.dataset.shapeId = this.shapeId.toString();
+  createShape(container: HTMLElement): void {
     this.shape = document.createElement('div');
-    this.setElementPositionToTopLeft(element);
-    element.appendChild(this.shape);
-    return element;
+    container.appendChild(this.shape);
   }
 
   updateContentStyle() {

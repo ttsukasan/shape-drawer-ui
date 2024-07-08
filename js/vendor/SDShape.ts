@@ -1,6 +1,6 @@
 export abstract class SDShape {
   shapeId: number;
-  element: HTMLElement;
+  container: HTMLElement;
   resizeHandle: HTMLElement;
   deleteButton: HTMLElement;
   isInteracting: boolean = false;
@@ -22,23 +22,30 @@ export abstract class SDShape {
   constructor(shapeId: number, color: string) {
     this.shapeId = shapeId;
     this.shapeColor = color;
-    this.element = this.createElement();
-    console.log('element', this.element)
+    this.container = this.createContainer();
+    this.createShape(this.container as HTMLElement);
     this.resizeHandle = this.createResizeHandle();
     this.deleteButton = this.createDeleteButton();
-    document.body.prepend(this.element);
+    document.body.prepend(this.container);
     this.updateElementStyle();
     this.updateContentStyle();
     this.attachEvents();
   }
 
-  abstract createElement(): HTMLElement;
+  createContainer(): HTMLElement {
+    const el = document.createElement('div');
+    el.dataset.shapeId = this.shapeId.toString();
+    this.setElementPositionToTopLeft(el);
+    return el;
+  }
+
+  abstract createShape(container: HTMLElement): void;
 
   updateElementStyle() {
-    if (!this.element) {
+    if (!this.container) {
       return;
     }
-    Object.assign(this.element.style, {
+    Object.assign(this.container.style, {
       width: `${this.width}px`,
       height: `${this.height}px`,
       position: 'absolute',
@@ -80,7 +87,7 @@ export abstract class SDShape {
     label.style.marginRight = '-1px'
     button.appendChild(label);
     button.addEventListener('click', () => this.deleteElement());
-    this.element.appendChild(button);
+    this.container.appendChild(button);
     return button;
   }
 
@@ -97,7 +104,7 @@ export abstract class SDShape {
       visibility: 'hidden',
     });
     handle.addEventListener('mousedown', (e: MouseEvent) => this.initResize(e));
-    this.element.appendChild(handle);
+    this.container.appendChild(handle);
     return handle;
   }
 
@@ -148,14 +155,14 @@ export abstract class SDShape {
   }
 
   attachEvents() {
-    this.element.addEventListener('mousedown', (e: MouseEvent) => {
+    this.container.addEventListener('mousedown', (e: MouseEvent) => {
       if (this.shouldIgnoreClick(e)) return;
       e.preventDefault();
-      const rect = this.element.getBoundingClientRect();
+      const rect = this.container.getBoundingClientRect();
       this.offsetX = e.clientX - rect.left;
       this.offsetY = e.clientY - rect.top;
       this.isDragging = true;
-      this.element.style.opacity = '0.8';
+      this.container.style.opacity = '0.8';
     });
 
     document.addEventListener('mousemove', (e: MouseEvent) => {
@@ -163,19 +170,19 @@ export abstract class SDShape {
         e.preventDefault();
         const x = e.clientX - this.offsetX + window.scrollX;
         const y = e.clientY - this.offsetY + window.scrollY;
-        this.element.style.left = `${x}px`;
-        this.element.style.top = `${y}px`;
+        this.container.style.left = `${x}px`;
+        this.container.style.top = `${y}px`;
       }
     });
 
     document.addEventListener('mouseup', () => {
       if (this.isDragging) {
         this.isDragging = false;
-        this.element.style.opacity = '1';
+        this.container.style.opacity = '1';
       }
     });
 
-    this.element.addEventListener('mouseenter', () => {
+    this.container.addEventListener('mouseenter', () => {
       this.isInteracting = true;
       this.updateElementStyle();
       this.updateContentStyle();
@@ -185,7 +192,7 @@ export abstract class SDShape {
       }
     });
 
-    this.element.addEventListener('mouseleave', () => {
+    this.container.addEventListener('mouseleave', () => {
       this.isInteracting = false;
       this.updateElementStyle();
       this.updateContentStyle();
@@ -199,8 +206,8 @@ export abstract class SDShape {
   abstract updateContentStyle(): void;
 
   deleteElement() {
-    if (document.body.contains(this.element)) {
-      document.body.removeChild(this.element);
+    if (document.body.contains(this.container)) {
+      document.body.removeChild(this.container);
     }
   }
 

@@ -1,4 +1,4 @@
-import { SDShape } from './SDShape';
+import {SDShape} from './SDShape';
 
 export class SDTextarea extends SDShape {
   textArea!: HTMLTextAreaElement;
@@ -9,16 +9,12 @@ export class SDTextarea extends SDShape {
     super(shapeId, color)
   }
 
-  createElement(): HTMLElement {
-    const element = document.createElement('div');
-    element.dataset.shapeId = this.shapeId.toString();
+  createShape(container: HTMLElement): void {
     this.textArea = document.createElement('textarea');
     this.textArea.placeholder = 'テキストを入力';
-    this.setElementPositionToTopLeft(element);
-    element.appendChild(this.textArea);
+    container.appendChild(this.textArea);
     this.fontSizeToggle = this.createFontSizeToggle();
-    element.appendChild(this.fontSizeToggle);
-    return element;
+    container.appendChild(this.fontSizeToggle);
   }
 
   updateContentStyle() {
