@@ -14,13 +14,14 @@ export abstract class SDShape {
   offsetY: number = 0;
   boundResize: ((e: MouseEvent) => void) | null = null;
   boundStopResize: (() => void) | null = null;
-  borderColor: string = '#ec4899';
+  shapeColor: string = 'transparent';
   accentColor: string = 'rgb(107, 114, 128)';
   handleGradient: string = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`;
   fontFamily: string = `"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif`;
 
-  constructor(shapeId: number) {
+  constructor(shapeId: number, color: string) {
     this.shapeId = shapeId;
+    this.shapeColor = color;
     this.element = this.createElement();
     console.log('element', this.element)
     this.resizeHandle = this.createResizeHandle();

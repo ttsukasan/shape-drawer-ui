@@ -1,17 +1,23 @@
+import {SDTextarea} from "./SDTextarea";
+import {SDRoundRect} from "./SDRoundRect";
+import {SDShape} from "./SDShape";
+
 export class SDMenu {
   private dialog: HTMLDivElement;
-  private closeButton: HTMLButtonElement;
+  private closeButton!: HTMLButtonElement;
   private colors: { txt: string, bg: string, gray: string } = {txt: '#FFFEFE', bg: '#292D3E', gray: '#ABB2BF'};
-  private palletColors: string[] = ['#E4E5F1', '#D52753', '#23974A', '#DF631C', '#275FE4', '#26272D',]; // Bluloco Zsh Light
+  private palletColors: string[] = ['#D52753', '#23974A', '#DF631C', '#275FE4', '#26272D',]; // Bluloco Zsh Light
   private colorButtons: HTMLButtonElement[] = [];
   private selectedColor: string = 'black';
+  private shapes: SDShape[] = [];
 
   constructor() {
     this.dialog = this.createDialog();
-    this.closeButton = this.createCloseButton();
-    this.dialog.appendChild(this.closeButton);
-    this.createColorButtons();
-    this.createActionButtons();
+    // this.closeButton = this.createCloseButton();
+    // this.dialog.appendChild(this.closeButton);
+    this.createCloseButton()
+    this.createColorButtons()
+    this.createActionButtons()
     document.body.appendChild(this.dialog);
 
     this.closeButton.addEventListener('click', () => this.hideDialog());
@@ -43,21 +49,36 @@ export class SDMenu {
     dialog.style.color = this.colors.txt;
     dialog.style.padding = '10px';
     dialog.style.zIndex = '1000';
-    dialog.innerText = 'SDMenu';
+    // const title = document.createElement('div')
+    // this.resetStyle(title)
+    // title.style.color = this.colors.txt
+    // title.style.display = 'inline-block'
+    // title.style.fontSize = '12px'
+    // title.innerText = '枠ポン'
+    // dialog.appendChild(title)
     return dialog;
   }
 
-  private createCloseButton(): HTMLButtonElement {
+  private createCloseButton(): void {
+    const div = document.createElement('div');
+    this.resetStyle(div);
+    div.style.textAlign = 'right';
     const button = document.createElement('button');
     this.resetStyle(button);
-    button.innerText = '✖';
+    button.innerText = '閉じる';
     button.style.backgroundColor = 'transparent';
+    button.style.textDecoration = 'underline';
+    // button.style.fontSize = '12px';
     button.style.color = 'white';
     button.style.border = 'none';
     button.style.cursor = 'pointer';
-    button.style.float = 'right';
-    button.style.marginLeft = '10px';
-    return button;
+    // button.style.float = 'right';
+    // button.style.marginLeft = '10px';
+    // return button;
+    div.appendChild(button);
+    this.dialog.appendChild(div);
+    this.closeButton = button;
+
   }
 
   private createColorButtons(): void {
@@ -71,16 +92,16 @@ export class SDMenu {
       button.style.backgroundColor = color;
       button.style.border = `solid 1px rgba(255, 255, 255, .4)`;
       button.style.color = 'white';
-      button.style.margin = '5px';
+      button.style.margin = '4px';
       button.style.cursor = 'pointer';
-      button.style.padding = '10px';
+      button.style.padding = '8px';
       button.style.borderRadius = '50%';
       button.addEventListener('click', () => this.selectColor(color));
       pallet.appendChild(button);
       this.colorButtons.push(button);
     });
     this.dialog.appendChild(pallet);
-    this.selectedColor = colors[1];
+    this.selectedColor = colors[0];
     this.updateButtonStyles();
   }
 
@@ -111,7 +132,14 @@ export class SDMenu {
       button.style.width = '32px';
       button.style.height = '32px';
       button.style.margin = '0 5px';
-      button.addEventListener('click', () => console.log(`${shape}ボタンがクリックされました`));
+      button.addEventListener('click', () => {
+        const shapeId = this.shapes.length + 1;
+        if (shape === 'textarea') {
+          this.shapes.push(new SDTextarea(shapeId, this.selectedColor));
+        } else if(shape === 'roundRect') {
+          this.shapes.push(new SDRoundRect(shapeId, this.selectedColor));
+        }
+      })
       actionContainer.appendChild(button);
     });
 

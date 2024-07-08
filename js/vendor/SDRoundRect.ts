@@ -1,10 +1,10 @@
 import { SDShape } from './SDShape';
 
-export class SDRectangle extends SDShape {
+export class SDRoundRect extends SDShape {
   shape!: HTMLElement;
 
-  constructor(shapeId: number) {
-    super(shapeId);
+  constructor(shapeId: number, color: string) {
+    super(shapeId, color)
   }
 
   createElement(): HTMLElement {
@@ -23,7 +23,7 @@ export class SDRectangle extends SDShape {
       height: `${this.height - 30}px`,
       marginTop: '15px',
       marginLeft: '15px',
-      border: `4px solid ${this.borderColor}`,
+      border: `4px solid ${this.shapeColor}`,
       borderRadius: '15px',
     });
   }

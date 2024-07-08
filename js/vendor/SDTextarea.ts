@@ -3,11 +3,10 @@ import { SDShape } from './SDShape';
 export class SDTextarea extends SDShape {
   textArea!: HTMLTextAreaElement;
   fontSizeToggle!: HTMLElement;
-  textColor: string = '#ec4899';
   fontSize: string = '18px';
 
-  constructor(shapeId: number) {
-    super(shapeId);
+  constructor(shapeId: number, color: string) {
+    super(shapeId, color)
   }
 
   createElement(): HTMLElement {
@@ -24,14 +23,14 @@ export class SDTextarea extends SDShape {
 
   updateContentStyle() {
     Object.assign(this.textArea.style, {
-      color: this.textColor,
+      color: this.shapeColor,
       resize: 'none',
       boxSizing: 'border-box',
       width: `${this.width - 30}px`,
       height: `${this.height - 30}px`,
       marginTop: '15px',
       marginLeft: '15px',
-      border: this.isInteracting ? `1px dashed ${this.borderColor}` : `1px dashed transparent`,
+      border: this.isInteracting ? `1px dashed ${this.shapeColor}` : `1px dashed transparent`,
       borderRadius: '4px',
       padding: '5px',
       outline: 'none',
