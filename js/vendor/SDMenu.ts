@@ -51,7 +51,7 @@ export class SDMenu {
     dialog.style.backgroundColor = this.colors.bg;
     dialog.style.color = this.colors.txt;
     dialog.style.padding = '10px';
-    dialog.style.zIndex = '1000';
+    dialog.style.zIndex = `${Number.MAX_SAFE_INTEGER - 10000}`;
     // const title = document.createElement('div')
     // this.resetStyle(title)
     // title.style.color = this.colors.txt

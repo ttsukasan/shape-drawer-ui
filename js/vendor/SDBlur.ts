@@ -15,10 +15,10 @@ export class SDBlur extends SDShape {
   updateContentStyle() {
     Object.assign(this.shape.style, {
       boxSizing: 'border-box',
-      width: `${this.width - 30}px`,
-      height: `${this.height - 30}px`,
-      marginTop: '15px',
-      marginLeft: '15px',
+      width: `${this.width - 4}px`,
+      height: `${this.height - 4}px`,
+      marginTop: '1px',
+      marginLeft: '1px',
       backgroundColor: 'rgba(255, 255, 255, 0)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
