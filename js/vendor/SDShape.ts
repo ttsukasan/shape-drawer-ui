@@ -49,7 +49,7 @@ export abstract class SDShape {
       width: `${this.width}px`,
       height: `${this.height}px`,
       position: 'absolute',
-      zIndex: `${Number.MAX_SAFE_INTEGER - 10000 + this.shapeId}`,
+      zIndex: `${2147483647 - 100 + this.shapeId}`,
       cursor: 'move',
       display: 'flex',
       justifyContent: 'left',

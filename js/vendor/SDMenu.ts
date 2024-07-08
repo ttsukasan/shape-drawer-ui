@@ -51,7 +51,7 @@ export class SDMenu {
     dialog.style.backgroundColor = this.colors.bg;
     dialog.style.color = this.colors.txt;
     dialog.style.padding = '10px';
-    dialog.style.zIndex = `${Number.MAX_SAFE_INTEGER - 10000}`;
+    dialog.style.zIndex = `${2147483647 - 100}`;
     // const title = document.createElement('div')
     // this.resetStyle(title)
     // title.style.color = this.colors.txt
@@ -136,6 +136,7 @@ export class SDMenu {
       button.style.width = '32px';
       button.style.height = '32px';
       button.style.margin = '0 5px';
+      button.style.padding = '0';
       button.addEventListener('click', () => {
         const shapeId = this.shapes.length + 1;
         const klass = {
