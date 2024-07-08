@@ -1,4 +1,5 @@
 import {SDShape} from './SDShape';
+import {SDConfig} from "./SDConfig";
 
 export class SDTextarea extends SDShape {
   textArea!: HTMLTextAreaElement;
@@ -35,7 +36,7 @@ export class SDTextarea extends SDShape {
       overflow: 'hidden',
       fontSize: this.fontSize,
       fontWeight: 'bold',
-      fontFamily: this.fontFamily,
+      fontFamily: SDConfig.fontFamily,
       lineHeight: '1.3',
       background: 'transparent',
       textShadow: '2px 2px 0px #fff, -2px -2px 0px #fff, -2px 2px 0px #fff, 2px -2px 0px #fff, 2px 0px 0px #fff, -2px 0px 0px #fff, 0px 2px 0px #fff, 0px -2px 0px #fff, 0px 0px 2px #fff',
@@ -61,7 +62,7 @@ export class SDTextarea extends SDShape {
       userSelect: 'none',
       visibility: 'hidden',
       fontSize: '16px',
-      fontFamily: this.fontFamily,
+      fontFamily: SDConfig.fontFamily,
     });
     toggle.addEventListener('click', () => this.toggleFontSize());
     return toggle;

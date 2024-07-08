@@ -1,3 +1,5 @@
+import {SDConfig} from "./SDConfig";
+
 export abstract class SDShape {
   shapeId: number;
   container: HTMLElement;
@@ -17,7 +19,6 @@ export abstract class SDShape {
   shapeColor: string = 'transparent';
   accentColor: string = 'rgb(107, 114, 128)';
   handleGradient: string = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`;
-  fontFamily: string = `"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif`;
 
   constructor(shapeId: number, color: string) {
     this.shapeId = shapeId;
@@ -49,7 +50,7 @@ export abstract class SDShape {
       width: `${this.width}px`,
       height: `${this.height}px`,
       position: 'absolute',
-      zIndex: `${2147483647 - 100 + this.shapeId}`,
+      zIndex: `${SDConfig.zIndexBase + this.shapeId}`,
       cursor: 'move',
       display: 'flex',
       justifyContent: 'left',
@@ -78,7 +79,7 @@ export abstract class SDShape {
       userSelect: 'none',
       visibility: 'hidden',
       fontSize: '24px',
-      fontFamily: this.fontFamily,
+      fontFamily: SDConfig.fontFamily,
     });
     // button.textContent = '×';
     const label = document.createElement('div')

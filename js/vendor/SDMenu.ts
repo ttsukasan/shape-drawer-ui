@@ -4,12 +4,12 @@ import {SDShape} from "./SDShape";
 import {SDRect} from "./SDRect";
 import {SDCircle} from "./SDCircle";
 import {SDBlur} from "./SDBlur";
+import {SDConfig} from "./SDConfig";
 
 export class SDMenu {
   private dialog: HTMLDivElement;
   private closeButton!: HTMLButtonElement;
   private colors: { txt: string, bg: string, gray: string } = {txt: '#FFFEFE', bg: '#292D3E', gray: '#ABB2BF'};
-  private palletColors: string[] = ['#D52753', '#23974A', '#DF631C', '#275FE4', '#26272D',]; // Bluloco Zsh Light
   private colorButtons: HTMLButtonElement[] = [];
   private selectedColor: string = 'black';
   private shapes: SDShape[] = [];
@@ -51,7 +51,7 @@ export class SDMenu {
     dialog.style.backgroundColor = this.colors.bg;
     dialog.style.color = this.colors.txt;
     dialog.style.padding = '10px';
-    dialog.style.zIndex = `${2147483647 - 100}`;
+    dialog.style.zIndex = `${SDConfig.zIndexBase}`;
     // const title = document.createElement('div')
     // this.resetStyle(title)
     // title.style.color = this.colors.txt
@@ -88,8 +88,7 @@ export class SDMenu {
     const pallet = document.createElement('div');
     this.resetStyle(pallet);
 
-    const colors = this.palletColors;
-    colors.forEach(color => {
+    SDConfig.palletColors.forEach(color => {
       const button = document.createElement('button');
       button.dataset.value = color;
       button.style.backgroundColor = color;
@@ -104,7 +103,7 @@ export class SDMenu {
       this.colorButtons.push(button);
     });
     this.dialog.appendChild(pallet);
-    this.selectedColor = colors[0];
+    this.selectedColor = SDConfig.palletColors[0];
     this.updateButtonStyles();
   }
 
@@ -116,17 +115,9 @@ export class SDMenu {
     actionContainer.style.marginTop = '8px';
 
     const shapes = ['rect', 'roundRect', 'circle', 'textarea', 'blur'];
-    const shapeIcons = [
-      `<svg width="32" height="32"><rect width="24" height="24" x="4" y="4" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
-      `<svg width="32" height="32"><rect x="4" y="4" width="24" height="24" rx="6" ry="6" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
-      `<svg width="32" height="32"><circle cx="16" cy="16" r="12" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
-      `<svg width="32" height="32"><text x="8" y="26" fill="white" font-size="26" font-family="Arial">A</text></svg>`,
-      `<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 28 C24 28, 28 20, 16 4 C4 20, 8 28, 16 28 Z" style="fill:white; stroke:none; opacity:0.5;"/></svg>`
-    ];
-
     shapes.forEach((shape, index) => {
       const button = document.createElement('button');
-      button.innerHTML = shapeIcons[index];
+      button.innerHTML = SDConfig.shapeIcons[index];
       button.style.display = 'flex';
       button.style.alignItems = 'center';
       button.style.justifyContent = 'center';
