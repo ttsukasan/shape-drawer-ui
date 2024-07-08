@@ -150,8 +150,8 @@ export abstract class SDShape {
   setElementPositionToTopLeft(element: HTMLElement) {
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
-    element.style.left = `${scrollX + 100 + (this.shapeId - 1) * 15}px`;
-    element.style.top = `${scrollY + 80 + (this.shapeId - 1) * 15}px`;
+    element.style.left = `${scrollX + 30 + (this.shapeId - 1) * 15}px`;
+    element.style.top = `${scrollY + 120 + (this.shapeId - 1) * 15}px`;
   }
 
   attachEvents() {
@@ -162,7 +162,7 @@ export abstract class SDShape {
       this.offsetX = e.clientX - rect.left;
       this.offsetY = e.clientY - rect.top;
       this.isDragging = true;
-      this.container.style.opacity = '0.8';
+      // this.container.style.opacity = '0.8';
     });
 
     document.addEventListener('mousemove', (e: MouseEvent) => {

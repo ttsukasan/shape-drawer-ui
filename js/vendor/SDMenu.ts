@@ -1,6 +1,9 @@
 import {SDTextarea} from "./SDTextarea";
 import {SDRoundRect} from "./SDRoundRect";
 import {SDShape} from "./SDShape";
+import {SDRect} from "./SDRect";
+import {SDCircle} from "./SDCircle";
+import {SDBlur} from "./SDBlur";
 
 export class SDMenu {
   private dialog: HTMLDivElement;
@@ -112,12 +115,13 @@ export class SDMenu {
     actionContainer.style.gap = '10px';
     actionContainer.style.marginTop = '8px';
 
-    const shapes = ['rect', 'roundRect', 'circle', 'textarea',];
+    const shapes = ['rect', 'roundRect', 'circle', 'textarea', 'blur'];
     const shapeIcons = [
       `<svg width="32" height="32"><rect width="24" height="24" x="4" y="4" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
       `<svg width="32" height="32"><rect x="4" y="4" width="24" height="24" rx="6" ry="6" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
       `<svg width="32" height="32"><circle cx="16" cy="16" r="12" style="fill:none;stroke:white;stroke-width:2;"/></svg>`,
       `<svg width="32" height="32"><text x="8" y="26" fill="white" font-size="26" font-family="Arial">A</text></svg>`,
+      `<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 28 C24 28, 28 20, 16 4 C4 20, 8 28, 16 28 Z" style="fill:white; stroke:none; opacity:0.5;"/></svg>`
     ];
 
     shapes.forEach((shape, index) => {
@@ -134,11 +138,14 @@ export class SDMenu {
       button.style.margin = '0 5px';
       button.addEventListener('click', () => {
         const shapeId = this.shapes.length + 1;
-        if (shape === 'textarea') {
-          this.shapes.push(new SDTextarea(shapeId, this.selectedColor));
-        } else if(shape === 'roundRect') {
-          this.shapes.push(new SDRoundRect(shapeId, this.selectedColor));
-        }
+        const klass = {
+          textarea: SDTextarea,
+          roundRect: SDRoundRect,
+          rect: SDRect,
+          circle: SDCircle,
+          blur: SDBlur
+        }[shape]
+        klass && this.shapes.push(new klass(shapeId, this.selectedColor));
       })
       actionContainer.appendChild(button);
     });

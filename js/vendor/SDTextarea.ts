@@ -7,6 +7,8 @@ export class SDTextarea extends SDShape {
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
+    this.fontSize = '18px';
+    this.updateContentStyle()
   }
 
   createShape(container: HTMLElement): void {
