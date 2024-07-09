@@ -5,8 +5,8 @@ export class SDCircle extends SDShape {
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
-    this.width = 200
-    this.height = 200
+    this.width = 160
+    this.height = 160
     this.resizeMinWidth = 32
     this.resizeMinHeight = 32
     this.updateShapeStyle()

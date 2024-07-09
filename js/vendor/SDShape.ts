@@ -8,8 +8,8 @@ export abstract class SDShape {
   isInteracting: boolean = false
   isDragging: boolean = false
   isResizing: boolean = false
-  width: number = 200
-  height: number = 90
+  width: number = 180
+  height: number = 120
   resizeMinWidth: number = 60
   resizeMinHeight: number = 26
   mouseX: number = 0
