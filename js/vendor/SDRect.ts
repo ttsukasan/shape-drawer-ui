@@ -12,7 +12,7 @@ export class SDRect extends SDShape {
     container.appendChild(this.shape)
   }
 
-  updateContentStyle() {
+  updateShapeStyle() {
     Object.assign(this.shape.style, {
       boxSizing: 'border-box',
       width: `${this.width - 30}px`,

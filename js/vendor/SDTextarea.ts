@@ -9,7 +9,7 @@ export class SDTextarea extends SDShape {
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
     this.fontSize = '18px'
-    this.updateContentStyle()
+    this.updateShapeStyle()
   }
 
   createShape(container: HTMLElement): void {
@@ -20,7 +20,7 @@ export class SDTextarea extends SDShape {
     container.appendChild(this.fontSizeToggle)
   }
 
-  updateContentStyle() {
+  updateShapeStyle() {
     Object.assign(this.textArea.style, {
       color: this.shapeColor,
       resize: 'none',
@@ -70,7 +70,7 @@ export class SDTextarea extends SDShape {
 
   toggleFontSize() {
     this.fontSize = this.fontSize === '18px' ? '36px' : '18px'
-    this.updateContentStyle()
+    this.updateShapeStyle()
   }
 
   protected shouldIgnoreClick(e: MouseEvent): boolean {

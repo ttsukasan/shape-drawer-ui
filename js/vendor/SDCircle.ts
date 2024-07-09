@@ -7,7 +7,7 @@ export class SDCircle extends SDShape {
     super(shapeId, color)
     this.width = 200
     this.height = 200
-    this.updateContentStyle()
+    this.updateShapeStyle()
   }
 
   createShape(container: HTMLElement): void {
@@ -15,7 +15,7 @@ export class SDCircle extends SDShape {
     container.appendChild(this.shape)
   }
 
-  updateContentStyle() {
+  updateShapeStyle() {
     Object.assign(this.shape.style, {
       boxSizing: 'border-box',
       width: `${this.width - 30}px`,

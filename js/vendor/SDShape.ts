@@ -28,21 +28,24 @@ export abstract class SDShape {
     this.resizeHandle = this.createResizeHandle()
     this.deleteButton = this.createDeleteButton()
     document.body.prepend(this.container)
-    this.updateElementStyle()
-    this.updateContentStyle()
+    this.updateContainerStyle()
+    this.updateShapeStyle()
     this.attachEvents()
   }
 
   createContainer(): HTMLElement {
     const el = document.createElement('div')
+    const scrollX = window.scrollX
+    const scrollY = window.scrollY
+    el.style.left = `${scrollX + 30 + (this.shapeId - 1) * 15}px`
+    el.style.top = `${scrollY + 120 + (this.shapeId - 1) * 15}px`
     el.dataset.shapeId = this.shapeId.toString()
-    this.setElementPositionToTopLeft(el)
     return el
   }
 
   abstract createShape(container: HTMLElement): void;
 
-  updateElementStyle() {
+  updateContainerStyle() {
     if (!this.container) {
       return
     }
@@ -128,8 +131,8 @@ export abstract class SDShape {
       this.width = Math.max(60, this.width + widthChange)
       this.height = Math.max(38, this.height + heightChange)
       this.isInteracting = true
-      this.updateElementStyle()
-      this.updateContentStyle()
+      this.updateContainerStyle()
+      this.updateShapeStyle()
       this.deleteButton.style.visibility = this.height < 40 ? 'hidden' : 'visible'
       this.mouseX = e.clientX
       this.mouseY = e.clientY
@@ -146,13 +149,6 @@ export abstract class SDShape {
       this.boundResize = null
       this.boundStopResize = null
     }
-  }
-
-  setElementPositionToTopLeft(element: HTMLElement) {
-    const scrollX = window.scrollX
-    const scrollY = window.scrollY
-    element.style.left = `${scrollX + 30 + (this.shapeId - 1) * 15}px`
-    element.style.top = `${scrollY + 120 + (this.shapeId - 1) * 15}px`
   }
 
   attachEvents() {
@@ -185,8 +181,8 @@ export abstract class SDShape {
 
     this.container.addEventListener('mouseenter', () => {
       this.isInteracting = true
-      this.updateElementStyle()
-      this.updateContentStyle()
+      this.updateContainerStyle()
+      this.updateShapeStyle()
       this.resizeHandle.style.visibility = 'visible'
       if (this.height >= 40) {
         this.deleteButton.style.visibility = 'visible'
@@ -195,8 +191,8 @@ export abstract class SDShape {
 
     this.container.addEventListener('mouseleave', () => {
       this.isInteracting = false
-      this.updateElementStyle()
-      this.updateContentStyle()
+      this.updateContainerStyle()
+      this.updateShapeStyle()
       if (!this.isResizing) {
         this.resizeHandle.style.visibility = 'hidden'
       }
@@ -204,7 +200,7 @@ export abstract class SDShape {
     })
   }
 
-  abstract updateContentStyle(): void;
+  abstract updateShapeStyle(): void;
 
   deleteElement() {
     if (document.body.contains(this.container)) {
@@ -212,6 +208,7 @@ export abstract class SDShape {
     }
   }
 
+  // クリックイベントを許可する判定。テキストエリア入力で利用
   protected shouldIgnoreClick(e: MouseEvent): boolean {
     return false
   }
