@@ -14,8 +14,6 @@ export abstract class SDShape {
   mouseY: number = 0
   offsetX: number = 0
   offsetY: number = 0
-  boundResize: ((e: MouseEvent) => void) | null = null
-  boundStopResize: (() => void) | null = null
   shapeColor: string = 'transparent'
   accentColor: string = 'rgb(107, 114, 128)'
   handleGradient: string = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`
@@ -107,21 +105,16 @@ export abstract class SDShape {
       cursor: 'nwse-resize',
       visibility: 'hidden',
     })
-    handle.addEventListener('mousedown', (e: MouseEvent) => this.initResize(e))
+    handle.addEventListener('mousedown', (e: MouseEvent) => this.startResize(e))
     this.container.appendChild(handle)
     return handle
   }
 
-  initResize(e: MouseEvent) {
-    e.stopPropagation()
+  startResize(e: MouseEvent) {
+    e.stopPropagation() // リサイズ中にドラッグ移動をしない
     this.isResizing = true
     this.mouseX = e.clientX
     this.mouseY = e.clientY
-    this.boundResize = this.resize.bind(this)
-    this.boundStopResize = this.stopResize.bind(this)
-    document.addEventListener('mousemove', this.boundResize)
-    document.addEventListener('mouseup', this.boundStopResize)
-    this.resizeHandle.style.visibility = 'visible'
   }
 
   resize(e: MouseEvent) {
@@ -139,18 +132,6 @@ export abstract class SDShape {
     }
   }
 
-  stopResize() {
-    if (this.isResizing) {
-      this.isResizing = false
-    }
-    if (this.boundResize && this.boundStopResize) {
-      document.removeEventListener('mousemove', this.boundResize)
-      document.removeEventListener('mouseup', this.boundStopResize)
-      this.boundResize = null
-      this.boundStopResize = null
-    }
-  }
-
   attachEvents() {
     this.container.addEventListener('mousedown', (e: MouseEvent) => {
       if (this.shouldIgnoreClick(e)) return
@@ -159,7 +140,6 @@ export abstract class SDShape {
       this.offsetX = e.clientX - rect.left
       this.offsetY = e.clientY - rect.top
       this.isDragging = true
-      // this.container.style.opacity = '0.8';
     })
 
     document.addEventListener('mousemove', (e: MouseEvent) => {
@@ -170,15 +150,23 @@ export abstract class SDShape {
         this.container.style.left = `${x}px`
         this.container.style.top = `${y}px`
       }
-    })
-
-    document.addEventListener('mouseup', () => {
-      if (this.isDragging) {
-        this.isDragging = false
-        this.container.style.opacity = '1'
+      if (this.isResizing) {
+        this.resize(e)
       }
     })
 
+    document.addEventListener('mouseup', (e: MouseEvent) => {
+      console.log('mouseup', this.isResizing, this.isDragging, this.isInteracting)
+      this.isResizing = false
+      this.isDragging = false
+      // カーソルがcontainerの外にある場合、isInteractingをfalseに設定
+      if (!this.container.contains(e.target as Node)) {
+        this.isInteracting = false
+        this.resizeHandle.style.visibility = 'hidden'
+        this.deleteButton.style.visibility = 'hidden'
+      }
+      this.updateContainerStyle()
+    })
     this.container.addEventListener('mouseenter', () => {
       this.isInteracting = true
       this.updateContainerStyle()
