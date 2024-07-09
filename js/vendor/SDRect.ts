@@ -1,15 +1,15 @@
-import {SDShape} from './SDShape';
+import {SDShape} from './SDShape'
 
 export class SDRect extends SDShape {
-  shape!: HTMLElement;
+  shape!: HTMLElement
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
   }
 
   createShape(container: HTMLElement): void {
-    this.shape = document.createElement('div');
-    container.appendChild(this.shape);
+    this.shape = document.createElement('div')
+    container.appendChild(this.shape)
   }
 
   updateContentStyle() {
@@ -20,6 +20,6 @@ export class SDRect extends SDShape {
       marginTop: '15px',
       marginLeft: '15px',
       border: `4px solid ${this.shapeColor}`,
-    });
+    })
   }
 }

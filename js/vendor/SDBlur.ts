@@ -1,15 +1,15 @@
-import {SDShape} from './SDShape';
+import {SDShape} from './SDShape'
 
 export class SDBlur extends SDShape {
-  shape!: HTMLElement;
+  shape!: HTMLElement
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
   }
 
   createShape(container: HTMLElement): void {
-    this.shape = document.createElement('div');
-    container.appendChild(this.shape);
+    this.shape = document.createElement('div')
+    container.appendChild(this.shape)
   }
 
   updateContentStyle() {
@@ -22,6 +22,6 @@ export class SDBlur extends SDShape {
       backgroundColor: 'rgba(255, 255, 255, 0)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
-    });
+    })
   }
 }

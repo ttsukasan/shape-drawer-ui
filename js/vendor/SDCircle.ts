@@ -1,18 +1,18 @@
-import {SDShape} from './SDShape';
+import {SDShape} from './SDShape'
 
 export class SDCircle extends SDShape {
-  shape!: HTMLElement;
+  shape!: HTMLElement
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
-    this.width = 200;
-    this.height = 200;
+    this.width = 200
+    this.height = 200
     this.updateContentStyle()
   }
 
   createShape(container: HTMLElement): void {
-    this.shape = document.createElement('div');
-    container.appendChild(this.shape);
+    this.shape = document.createElement('div')
+    container.appendChild(this.shape)
   }
 
   updateContentStyle() {
@@ -24,6 +24,6 @@ export class SDCircle extends SDShape {
       marginLeft: '15px',
       border: `4px solid ${this.shapeColor}`,
       borderRadius: '50%',
-    });
+    })
   }
 }

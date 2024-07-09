@@ -1,3 +1,3 @@
-import {SDMenu} from "../js/vendor/SDMenu";
+import {SDMenu} from '../js/vendor/SDMenu'
 
-new SDMenu();
+new SDMenu()

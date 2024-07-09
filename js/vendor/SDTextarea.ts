@@ -1,23 +1,23 @@
-import {SDShape} from './SDShape';
-import {SDConfig} from "./SDConfig";
+import {SDShape} from './SDShape'
+import {SDConfig} from './SDConfig'
 
 export class SDTextarea extends SDShape {
-  textArea!: HTMLTextAreaElement;
-  fontSizeToggle!: HTMLElement;
-  fontSize: string = '18px';
+  textArea!: HTMLTextAreaElement
+  fontSizeToggle!: HTMLElement
+  fontSize: string = '18px'
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
-    this.fontSize = '18px';
+    this.fontSize = '18px'
     this.updateContentStyle()
   }
 
   createShape(container: HTMLElement): void {
-    this.textArea = document.createElement('textarea');
-    this.textArea.placeholder = 'テキストを入力';
-    container.appendChild(this.textArea);
-    this.fontSizeToggle = this.createFontSizeToggle();
-    container.appendChild(this.fontSizeToggle);
+    this.textArea = document.createElement('textarea')
+    this.textArea.placeholder = 'テキストを入力'
+    container.appendChild(this.textArea)
+    this.fontSizeToggle = this.createFontSizeToggle()
+    container.appendChild(this.fontSizeToggle)
   }
 
   updateContentStyle() {
@@ -41,12 +41,12 @@ export class SDTextarea extends SDShape {
       background: 'transparent',
       textShadow: '2px 2px 0px #fff, -2px -2px 0px #fff, -2px 2px 0px #fff, 2px -2px 0px #fff, 2px 0px 0px #fff, -2px 0px 0px #fff, 0px 2px 0px #fff, 0px -2px 0px #fff, 0px 0px 2px #fff',
       boxShadow: 'none',
-    });
+    })
   }
 
   createFontSizeToggle(): HTMLElement {
-    const toggle = document.createElement('div');
-    toggle.textContent = 'A';
+    const toggle = document.createElement('div')
+    toggle.textContent = 'A'
     Object.assign(toggle.style, {
       position: 'absolute',
       bottom: '0',
@@ -63,17 +63,17 @@ export class SDTextarea extends SDShape {
       visibility: 'hidden',
       fontSize: '16px',
       fontFamily: SDConfig.fontFamily,
-    });
-    toggle.addEventListener('click', () => this.toggleFontSize());
-    return toggle;
+    })
+    toggle.addEventListener('click', () => this.toggleFontSize())
+    return toggle
   }
 
   toggleFontSize() {
-    this.fontSize = this.fontSize === '18px' ? '36px' : '18px';
-    this.updateContentStyle();
+    this.fontSize = this.fontSize === '18px' ? '36px' : '18px'
+    this.updateContentStyle()
   }
 
   protected shouldIgnoreClick(e: MouseEvent): boolean {
-    return e.target === this.textArea;
+    return e.target === this.textArea
   }
 }
