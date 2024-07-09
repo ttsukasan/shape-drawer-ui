@@ -9,15 +9,12 @@ import {SDConfig} from "./SDConfig";
 export class SDMenu {
   private dialog: HTMLDivElement;
   private closeButton!: HTMLButtonElement;
-  private colors: { txt: string, bg: string, gray: string } = {txt: '#FFFEFE', bg: '#292D3E', gray: '#ABB2BF'};
   private colorButtons: HTMLButtonElement[] = [];
   private selectedColor: string = 'black';
   private shapes: SDShape[] = [];
 
   constructor() {
     this.dialog = this.createDialog();
-    // this.closeButton = this.createCloseButton();
-    // this.dialog.appendChild(this.closeButton);
     this.createCloseButton()
     this.createColorButtons()
     this.createActionButtons()
@@ -48,17 +45,10 @@ export class SDMenu {
     dialog.style.position = 'fixed';
     dialog.style.top = '0';
     dialog.style.left = '0';
-    dialog.style.backgroundColor = this.colors.bg;
-    dialog.style.color = this.colors.txt;
+    dialog.style.backgroundColor = SDConfig.bgColor;
+    dialog.style.color = SDConfig.textColor;
     dialog.style.padding = '10px';
     dialog.style.zIndex = `${SDConfig.zIndexBase}`;
-    // const title = document.createElement('div')
-    // this.resetStyle(title)
-    // title.style.color = this.colors.txt
-    // title.style.display = 'inline-block'
-    // title.style.fontSize = '12px'
-    // title.innerText = '枠ポン'
-    // dialog.appendChild(title)
     return dialog;
   }
 
@@ -71,13 +61,9 @@ export class SDMenu {
     button.innerText = '閉じる';
     button.style.backgroundColor = 'transparent';
     button.style.textDecoration = 'underline';
-    // button.style.fontSize = '12px';
     button.style.color = 'white';
     button.style.border = 'none';
     button.style.cursor = 'pointer';
-    // button.style.float = 'right';
-    // button.style.marginLeft = '10px';
-    // return button;
     div.appendChild(button);
     this.dialog.appendChild(div);
     this.closeButton = button;
@@ -92,7 +78,7 @@ export class SDMenu {
       const button = document.createElement('button');
       button.dataset.value = color;
       button.style.backgroundColor = color;
-      button.style.border = `solid 1px rgba(255, 255, 255, .4)`;
+      button.style.border = `solid 1px rgba(255, 254, 254, 0.3)`; // #FFFEFE
       button.style.color = 'white';
       button.style.margin = '4px';
       button.style.cursor = 'pointer';
@@ -153,7 +139,7 @@ export class SDMenu {
   private updateButtonStyles(): void {
     this.colorButtons.forEach(button => {
       if (button.dataset.value === this.selectedColor) {
-        button.style.outline = `2px solid ${this.colors.txt}`;
+        button.style.outline = `2px solid ${SDConfig.textColor}`;
       } else {
         button.style.outline = 'none';
       }
