@@ -4,11 +4,11 @@ import {SDConfig} from './SDConfig'
 export class SDTextarea extends SDShape {
   textArea!: HTMLTextAreaElement
   fontSizeToggle!: HTMLElement
+  fontSizes: string[] = ['18px', '24px', '36px']
   fontSize: string = '18px'
 
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
-    this.fontSize = '18px'
     this.resizeMinWidth = 64
     this.resizeMinHeight = 64
     this.updateShapeStyle()
@@ -71,11 +71,17 @@ export class SDTextarea extends SDShape {
   }
 
   toggleFontSize() {
-    this.fontSize = this.fontSize === '18px' ? '36px' : '18px'
+    // fontSizesの次の項目に切り替える
+    const index = this.fontSizes.indexOf(this.fontSize)
+    this.fontSize = this.fontSizes[(index + 1) % this.fontSizes.length]
     this.updateShapeStyle()
   }
 
   protected shouldIgnoreClick(e: MouseEvent): boolean {
     return e.target === this.textArea
+  }
+
+  protected updateOptionStyle(): any {
+    this.fontSizeToggle.style.visibility = this.isInteracting ? 'visible' : 'hidden'
   }
 }

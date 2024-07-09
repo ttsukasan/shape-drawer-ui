@@ -46,9 +46,6 @@ export abstract class SDShape {
   abstract createShape(container: HTMLElement): void;
 
   updateContainerStyle() {
-    if (!this.container) {
-      return
-    }
     Object.assign(this.container.style, {
       width: `${this.width}px`,
       height: `${this.height}px`,
@@ -63,6 +60,7 @@ export abstract class SDShape {
       transition: 'border .2s ease-in-out',
       boxSizing: 'border-box',
     })
+    this.updateOptionStyle()
   }
 
   createDeleteButton(): HTMLElement {
@@ -201,5 +199,10 @@ export abstract class SDShape {
   // クリックイベントを許可する判定。テキストエリア入力で利用
   protected shouldIgnoreClick(e: MouseEvent): boolean {
     return false
+  }
+
+  // Container内にオプションを表示する場合に利用
+  protected updateOptionStyle() {
+    return void (0)
   }
 }
