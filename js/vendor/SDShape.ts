@@ -10,12 +10,14 @@ export abstract class SDShape {
   isResizing: boolean = false
   width: number = 200
   height: number = 90
+  resizeMinWidth: number = 60
+  resizeMinHeight: number = 26
   mouseX: number = 0
   mouseY: number = 0
   offsetX: number = 0
   offsetY: number = 0
   shapeColor: string = 'transparent'
-  accentColor: string = 'rgb(107, 114, 128)'
+  accentColor: string = SDConfig.bgColor
   handleGradient: string = `linear-gradient(135deg, rgba(0,0,0,0) 60%, ${this.accentColor} 60%, ${this.accentColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 80%, ${this.accentColor} 80%, ${this.accentColor} 90%, rgba(0,0,0,0) 90%)`
 
   constructor(shapeId: number, color: string) {
@@ -121,8 +123,8 @@ export abstract class SDShape {
     if (this.isResizing) {
       const widthChange = e.clientX - this.mouseX
       const heightChange = e.clientY - this.mouseY
-      this.width = Math.max(60, this.width + widthChange)
-      this.height = Math.max(38, this.height + heightChange)
+      this.width = Math.max(this.resizeMinWidth, this.width + widthChange)
+      this.height = Math.max(this.resizeMinHeight, this.height + heightChange)
       this.isInteracting = true
       this.updateContainerStyle()
       this.updateShapeStyle()

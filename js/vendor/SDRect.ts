@@ -15,10 +15,10 @@ export class SDRect extends SDShape {
   updateShapeStyle() {
     Object.assign(this.shape.style, {
       boxSizing: 'border-box',
-      width: `${this.width - 30}px`,
-      height: `${this.height - 30}px`,
-      marginTop: '15px',
-      marginLeft: '15px',
+      width: `${this.width - 20}px`,
+      height: `${this.height - 20}px`,
+      marginTop: '10px',
+      marginLeft: '10px',
       border: `4px solid ${this.shapeColor}`,
     })
   }

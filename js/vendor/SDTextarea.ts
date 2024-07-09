@@ -9,6 +9,8 @@ export class SDTextarea extends SDShape {
   constructor(shapeId: number, color: string) {
     super(shapeId, color)
     this.fontSize = '18px'
+    this.resizeMinWidth = 64
+    this.resizeMinHeight = 64
     this.updateShapeStyle()
   }
 
@@ -30,7 +32,7 @@ export class SDTextarea extends SDShape {
       marginTop: '15px',
       marginLeft: '15px',
       border: this.isInteracting ? `1px dashed ${this.shapeColor}` : `1px dashed transparent`,
-      borderRadius: '4px',
+      borderRadius: '2px',
       padding: '5px',
       outline: 'none',
       overflow: 'hidden',
