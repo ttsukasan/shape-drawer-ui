@@ -96,34 +96,39 @@ export class SDMenu {
   private createActionButtons(): void {
     const actionContainer = document.createElement('div')
     this.resetStyle(actionContainer)
+    actionContainer.style.width = '240px'
     actionContainer.style.display = 'flex'
+    actionContainer.style.flexWrap = 'wrap'
     actionContainer.style.gap = '10px'
     actionContainer.style.marginTop = '8px'
 
-    const shapes = ['rect', 'roundRect', 'circle', 'textarea', 'blur']
+    const shapes = [
+      {key: 'rect', label: '四角', klass: SDRect},
+      {key: 'roundRect', label: '角丸', klass: SDRoundRect},
+      {key: 'circle', label: '円', klass: SDCircle},
+      {key: 'textarea', label: 'TXT', klass: SDTextarea},
+      {key: 'blur', label: 'ぼかし', klass: SDBlur},
+    ]
+    // const shapes = []
     shapes.forEach((shape, index) => {
       const button = document.createElement('button')
-      button.innerHTML = SDConfig.shapeIcons[index]
+      this.resetStyle(button)
+      button.innerText = shape.label
       button.style.display = 'flex'
       button.style.alignItems = 'center'
       button.style.justifyContent = 'center'
-      button.style.border = 'none'
+      button.style.color = SDConfig.textColor
+      button.style.border = `solid 1px rgba(255, 254, 254, 0.3)` // #FFFEFE
       button.style.backgroundColor = 'transparent'
       button.style.cursor = 'pointer'
-      button.style.width = '32px'
-      button.style.height = '32px'
-      button.style.margin = '0 5px'
-      button.style.padding = '0'
+      button.style.width = 'calc((100% / 3) - 10px)'
+      button.style.height = 'auto'
+      button.style.borderRadius = '4px'
+      button.style.margin = '0'
+      button.style.padding = '5px'
       button.addEventListener('click', () => {
-        const shapeId = this.shapes.length + 1
-        const klass = {
-          textarea: SDTextarea,
-          roundRect: SDRoundRect,
-          rect: SDRect,
-          circle: SDCircle,
-          blur: SDBlur,
-        }[shape]
-        klass && this.shapes.push(new klass(shapeId, this.selectedColor))
+        const shapeId = this.shapes.length + 1 // shapeId(表示優先度)
+        shape.klass && this.shapes.push(new shape.klass(shapeId, this.selectedColor))
       })
       actionContainer.appendChild(button)
     })

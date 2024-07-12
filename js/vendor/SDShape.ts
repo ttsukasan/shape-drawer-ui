@@ -38,7 +38,7 @@ export abstract class SDShape {
     const scrollX = window.scrollX
     const scrollY = window.scrollY
     el.style.left = `${scrollX + 30 + (this.shapeId - 1) * 15}px`
-    el.style.top = `${scrollY + 120 + (this.shapeId - 1) * 15}px`
+    el.style.top = `${scrollY + 200 + (this.shapeId - 1) * 15}px`
     el.dataset.shapeId = this.shapeId.toString()
     return el
   }
