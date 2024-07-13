@@ -17,8 +17,8 @@ export class SDRoundRect extends SDShape {
       boxSizing: 'border-box',
       width: `${this.width - 20}px`,
       height: `${this.height - 20}px`,
-      marginTop: '10px',
-      marginLeft: '10px',
+      marginTop: '9px',
+      marginLeft: '9px',
       border: `4px solid ${this.shapeColor}`,
       borderRadius: '15px',
     })

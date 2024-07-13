@@ -25,18 +25,20 @@ export class SDMenu {
   }
 
   private resetStyle(el: HTMLElement): void {
-    let i = 'initial'
-    el.style.color = i
-    el.style.textDecoration = i
-    el.style.fontFamily = i
-    el.style.fontSize = i
-    el.style.fontWeight = i
-    el.style.lineHeight = i
-    el.style.letterSpacing = i
-    el.style.textAlign = i
-    el.style.textTransform = i
-    el.style.textIndent = i
-    el.style.backgroundColor = i
+    const i = 'initial'
+    Object.assign(el.style, {
+      color: i,
+      textDecoration: i,
+      fontFamily: i,
+      fontSize: i,
+      fontWeight: i,
+      lineHeight: i,
+      letterSpacing: i,
+      textAlign: i,
+      textTransform: i,
+      textIndent: i,
+      backgroundColor: i,
+    })
   }
 
   private createDialog(): HTMLDivElement {
@@ -49,6 +51,7 @@ export class SDMenu {
     dialog.style.color = SDConfig.textColor
     dialog.style.padding = '10px'
     dialog.style.zIndex = `${SDConfig.zIndexBase}`
+    dialog.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'
     return dialog
   }
 
@@ -61,14 +64,46 @@ export class SDMenu {
     button.innerText = '閉じる'
     button.style.backgroundColor = 'transparent'
     button.style.textDecoration = 'underline'
-    button.style.color = 'white'
+    button.style.color = SDConfig.textColor
     button.style.border = 'none'
     button.style.cursor = 'pointer'
+    this.applyTooltip(button)
     div.appendChild(button)
+
     this.dialog.appendChild(div)
     this.closeButton = button
-
   }
+
+  private applyTooltip(button: HTMLButtonElement): void {
+    // ツールチップメッセージ
+    const tooltip = document.createElement('span')
+    this.resetStyle(tooltip)
+    tooltip.innerText = '画面左上にマウスを移動するとメニューが再表示されます'
+    tooltip.style.zIndex = `${SDConfig.zIndexBase + 1}`
+    tooltip.style.backgroundColor = 'rgba(0,0,0,0.7)'
+    tooltip.style.color = SDConfig.textColor
+    tooltip.style.padding = '4px 8px'
+    tooltip.style.borderRadius = '4px'
+    tooltip.style.fontSize = 'small'
+    tooltip.style.position = 'fixed'
+    tooltip.style.visibility = 'hidden'
+    document.body.appendChild(tooltip)
+
+    // mouseover時に表示、mouseoutで非表示
+    button.addEventListener('mouseover', (event) => {
+      tooltip.style.visibility = 'visible'
+      tooltip.style.left = `${event.clientX + 10}px`
+      tooltip.style.top = `${event.clientY}px`
+    })
+    button.addEventListener('mouseout', () => {
+      tooltip.style.visibility = 'hidden'
+    })
+    button.addEventListener('mousemove', (event) => {
+      tooltip.style.left = `${event.clientX + 10}px`
+      tooltip.style.top = `${event.clientY}px`
+    })
+  }
+
 
   private createColorButtons(): void {
     const pallet = document.createElement('div')
@@ -132,7 +167,6 @@ export class SDMenu {
       })
       actionContainer.appendChild(button)
     })
-
     this.dialog.appendChild(actionContainer)
   }
 
@@ -151,8 +185,16 @@ export class SDMenu {
     })
   }
 
+  // 閉じる動作とアニメーション
   private hideDialog(): void {
-    this.dialog.style.display = 'none'
+    this.dialog.style.transition = 'all 0.3s ease-out'
+    this.dialog.style.transform = 'translate(-50%, -50%) scale(0.2)'
+    this.dialog.style.opacity = '0.5'
+    setTimeout(() => {
+      this.dialog.style.display = 'none'
+      this.dialog.style.transform = 'none'
+      this.dialog.style.opacity = '1'
+    }, 300)
   }
 
   private showDialog(): void {
