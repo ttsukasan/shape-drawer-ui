@@ -44,14 +44,16 @@ export class SDMenu {
   private createDialog(): HTMLDivElement {
     const dialog = document.createElement('div')
     this.resetStyle(dialog)
-    dialog.style.position = 'fixed'
-    dialog.style.top = '0'
-    dialog.style.left = '0'
-    dialog.style.backgroundColor = SDConfig.bgColor
-    dialog.style.color = SDConfig.textColor
-    dialog.style.padding = '10px'
-    dialog.style.zIndex = `${SDConfig.zIndexBase}`
-    dialog.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'
+    Object.assign(dialog.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      backgroundColor: SDConfig.bgColor,
+      color: SDConfig.textColor,
+      padding: '10px',
+      zIndex: `${SDConfig.zIndexBase}`,
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    })
     return dialog
   }
 
@@ -62,11 +64,13 @@ export class SDMenu {
     const button = document.createElement('button')
     this.resetStyle(button)
     button.innerText = '閉じる'
-    button.style.backgroundColor = 'transparent'
-    button.style.textDecoration = 'underline'
-    button.style.color = SDConfig.textColor
-    button.style.border = 'none'
-    button.style.cursor = 'pointer'
+    Object.assign(button.style, {
+      backgroundColor: 'transparent',
+      textDecoration: 'underline',
+      color: SDConfig.textColor,
+      border: 'none',
+      cursor: 'pointer',
+    })
     this.applyTooltip(button)
     div.appendChild(button)
 
@@ -79,14 +83,16 @@ export class SDMenu {
     const tooltip = document.createElement('span')
     this.resetStyle(tooltip)
     tooltip.innerText = '画面左上にマウスを移動するとメニューが再表示されます'
-    tooltip.style.zIndex = `${SDConfig.zIndexBase + 1}`
-    tooltip.style.backgroundColor = 'rgba(0,0,0,0.7)'
-    tooltip.style.color = SDConfig.textColor
-    tooltip.style.padding = '4px 8px'
-    tooltip.style.borderRadius = '4px'
-    tooltip.style.fontSize = 'small'
-    tooltip.style.position = 'fixed'
-    tooltip.style.visibility = 'hidden'
+    Object.assign(tooltip.style, {
+      zIndex: `${SDConfig.zIndexBase + 1}`,
+      backgroundColor: 'rgba(0,0,0,0.7)',
+      color: SDConfig.textColor,
+      padding: '4px 8px',
+      borderRadius: '4px',
+      fontSize: 'small',
+      position: 'fixed',
+      visibility: 'hidden',
+    })
     document.body.appendChild(tooltip)
 
     // mouseover時に表示、mouseoutで非表示
@@ -112,13 +118,15 @@ export class SDMenu {
     SDConfig.palletColors.forEach(color => {
       const button = document.createElement('button')
       button.dataset.value = color
-      button.style.backgroundColor = color
-      button.style.border = `solid 1px rgba(255, 254, 254, 0.3)` // #FFFEFE
-      button.style.color = 'white'
-      button.style.margin = '4px'
-      button.style.cursor = 'pointer'
-      button.style.padding = '8px'
-      button.style.borderRadius = '50%'
+      Object.assign(button.style, {
+        backgroundColor: color,
+        border: `solid 1px rgba(255, 254, 254, 0.3)`, // #FFFEFE
+        color: 'white',
+        margin: '4px',
+        cursor: 'pointer',
+        padding: '8px',
+        borderRadius: '50%',
+      })
       button.addEventListener('click', () => this.selectColor(color))
       pallet.appendChild(button)
       this.colorButtons.push(button)
@@ -131,12 +139,13 @@ export class SDMenu {
   private createActionButtons(): void {
     const actionContainer = document.createElement('div')
     this.resetStyle(actionContainer)
-    actionContainer.style.width = '240px'
-    actionContainer.style.display = 'flex'
-    actionContainer.style.flexWrap = 'wrap'
-    actionContainer.style.gap = '10px'
-    actionContainer.style.marginTop = '8px'
-
+    Object.assign(actionContainer.style, {
+      width: '240px',
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '10px',
+      marginTop: '8px',
+    })
     const shapes = [
       {key: 'rect', label: '四角', klass: SDRect},
       {key: 'roundRect', label: '角丸', klass: SDRoundRect},
@@ -149,18 +158,20 @@ export class SDMenu {
       const button = document.createElement('button')
       this.resetStyle(button)
       button.innerText = shape.label
-      button.style.display = 'flex'
-      button.style.alignItems = 'center'
-      button.style.justifyContent = 'center'
-      button.style.color = SDConfig.textColor
-      button.style.border = `solid 1px rgba(255, 254, 254, 0.3)` // #FFFEFE
-      button.style.backgroundColor = 'transparent'
-      button.style.cursor = 'pointer'
-      button.style.width = 'calc((100% / 3) - 10px)'
-      button.style.height = 'auto'
-      button.style.borderRadius = '4px'
-      button.style.margin = '0'
-      button.style.padding = '5px'
+      Object.assign(button.style, {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: SDConfig.textColor,
+        border: `solid 1px rgba(255, 254, 254, 0.3)`, // #FFFEFE
+        backgroundColor: 'transparent',
+        cursor: 'pointer',
+        width: 'calc((100% / 3) - 10px)',
+        height: 'auto',
+        borderRadius: '4px',
+        margin: '0',
+        padding: '5px',
+      })
       button.addEventListener('click', () => {
         const shapeId = this.shapes.length + 1 // shapeId(表示優先度)
         shape.klass && this.shapes.push(new shape.klass(shapeId, this.selectedColor))
@@ -187,13 +198,17 @@ export class SDMenu {
 
   // 閉じる動作とアニメーション
   private hideDialog(): void {
-    this.dialog.style.transition = 'all 0.3s ease-out'
-    this.dialog.style.transform = 'translate(-50%, -50%) scale(0.2)'
-    this.dialog.style.opacity = '0.5'
+    Object.assign(this.dialog.style, {
+      transition: 'all 0.3s ease-out',
+      transform: 'translate(-50%, -50%) scale(0.2)',
+      opacity: '0.5',
+    })
     setTimeout(() => {
-      this.dialog.style.display = 'none'
-      this.dialog.style.transform = 'none'
-      this.dialog.style.opacity = '1'
+      Object.assign(this.dialog.style, {
+        display: 'none',
+        transform: 'none',
+        opacity: '1',
+      })
     }, 300)
   }
 
