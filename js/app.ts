@@ -1,4 +1,8 @@
 import '../css/style.css'
+// bundleするためのSDMenuクラスを読み込む
+import {SDMenu} from '../js/vendor/SDMenu'
+
+console.log(`Loaded SDMenu(${SDMenu.toString().length})`)
 
 // jsをテキストとして取得
 const fileUrls = [
