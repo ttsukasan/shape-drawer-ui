@@ -8,7 +8,7 @@ import {SDConfig} from './SDConfig'
 
 export class SDMenu {
   private dialog: HTMLDivElement
-  private toolbar: HTMLDivElement
+  private toolbar!: HTMLDivElement
   private closeButton!: HTMLButtonElement
   private colorButtons: HTMLButtonElement[] = []
   private selectedColor: string = SDConfig.palletColors[0]
@@ -129,7 +129,7 @@ export class SDMenu {
   private createColorButtons(): void {
     const pallet = document.createElement('div')
     this.resetStyle(pallet)
-    pallet.style.display = 'flex' // Add this line
+    pallet.style.display = 'flex'
     pallet.style.justifyContent = 'space-between' // Add this line
     pallet.style.color = SDConfig.textColor
     pallet.innerText = '色: '
@@ -173,7 +173,7 @@ export class SDMenu {
       {key: 'blur', label: 'ぼかし', klass: SDBlur},
     ]
     // const shapes = []
-    shapes.forEach((shape, index) => {
+    shapes.forEach((shape) => {
       const button = document.createElement('button')
       this.resetStyle(button)
       button.innerText = shape.label
