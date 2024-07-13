@@ -8,15 +8,17 @@ import {SDConfig} from './SDConfig'
 
 export class SDMenu {
   private dialog: HTMLDivElement
+  private toolbar: HTMLDivElement
   private closeButton!: HTMLButtonElement
   private colorButtons: HTMLButtonElement[] = []
-  private selectedColor: string = 'black'
+  private selectedColor: string = SDConfig.palletColors[0]
   private shapes: SDShape[] = []
 
   constructor() {
     this.dialog = this.createDialog()
-    this.createCloseButton()
+    this.createToolBar()
     this.createColorButtons()
+    this.createCloseButton()
     this.createActionButtons()
     document.body.appendChild(this.dialog)
 
@@ -57,25 +59,17 @@ export class SDMenu {
     return dialog
   }
 
-  private createCloseButton(): void {
-    const div = document.createElement('div')
-    this.resetStyle(div)
-    div.style.textAlign = 'right'
-    const button = document.createElement('button')
-    this.resetStyle(button)
-    button.innerText = '閉じる'
-    Object.assign(button.style, {
-      backgroundColor: 'transparent',
-      textDecoration: 'underline',
-      color: SDConfig.textColor,
-      border: 'none',
-      cursor: 'pointer',
+  private createToolBar(): void {
+    const toolbar = document.createElement('div')
+    this.resetStyle(toolbar)
+    Object.assign(toolbar.style, {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '8px',
     })
-    this.applyTooltip(button)
-    div.appendChild(button)
-
-    this.dialog.appendChild(div)
-    this.closeButton = button
+    this.toolbar = toolbar
+    this.dialog.appendChild(toolbar)
   }
 
   private applyTooltip(button: HTMLButtonElement): void {
@@ -91,18 +85,18 @@ export class SDMenu {
       borderRadius: '4px',
       fontSize: 'small',
       position: 'fixed',
-      visibility: 'hidden',
+      display: 'none',
     })
     document.body.appendChild(tooltip)
 
     // mouseover時に表示、mouseoutで非表示
     button.addEventListener('mouseover', (event) => {
-      tooltip.style.visibility = 'visible'
+      tooltip.style.display = 'block'
       tooltip.style.left = `${event.clientX + 10}px`
       tooltip.style.top = `${event.clientY}px`
     })
     button.addEventListener('mouseout', () => {
-      tooltip.style.visibility = 'hidden'
+      tooltip.style.display = 'none'
     })
     button.addEventListener('mousemove', (event) => {
       tooltip.style.left = `${event.clientX + 10}px`
@@ -110,12 +104,37 @@ export class SDMenu {
     })
   }
 
+  private createCloseButton(): void {
+    const div = document.createElement('div')
+    this.resetStyle(div)
+    div.style.textAlign = 'right'
+    div.style.flexGrow = '1' // Add this line
+    const button = document.createElement('button')
+    this.resetStyle(button)
+    button.innerText = '閉じる'
+    Object.assign(button.style, {
+      backgroundColor: 'transparent',
+      textDecoration: 'underline',
+      color: SDConfig.textColor,
+      border: 'none',
+      cursor: 'pointer',
+    })
+    this.applyTooltip(button)
+    div.appendChild(button)
+
+    this.toolbar.appendChild(div)
+    this.closeButton = button
+  }
 
   private createColorButtons(): void {
     const pallet = document.createElement('div')
     this.resetStyle(pallet)
+    pallet.style.display = 'flex' // Add this line
+    pallet.style.justifyContent = 'space-between' // Add this line
+    pallet.style.color = SDConfig.textColor
+    pallet.innerText = '色: '
 
-    SDConfig.palletColors.forEach(color => {
+    SDConfig.palletColors.forEach((color, i) => {
       const button = document.createElement('button')
       button.dataset.value = color
       Object.assign(button.style, {
@@ -127,12 +146,12 @@ export class SDMenu {
         padding: '8px',
         borderRadius: '50%',
       })
+      i === 0 && (button.style.marginLeft = '8px')
       button.addEventListener('click', () => this.selectColor(color))
       pallet.appendChild(button)
       this.colorButtons.push(button)
     })
-    this.dialog.appendChild(pallet)
-    this.selectedColor = SDConfig.palletColors[0]
+    this.toolbar.appendChild(pallet)
     this.updateButtonStyles()
   }
 
