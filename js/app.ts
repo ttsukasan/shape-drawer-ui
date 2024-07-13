@@ -1,6 +1,6 @@
-// import './index'
 import '../css/style.css'
-// // jsをテキストとして取得
+
+// jsをテキストとして取得
 const fileUrls = [
   'js/vendor/minified/execSDMenu.js',
 ]
