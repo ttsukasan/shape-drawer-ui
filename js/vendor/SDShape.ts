@@ -82,9 +82,8 @@ export abstract class SDShape {
       fontSize: '24px',
       fontFamily: SDConfig.fontFamily,
     })
-    // button.textContent = '×';
     const label = document.createElement('div')
-    label.textContent = '×' // '✖'
+    label.textContent = '×'
     label.style.marginTop = '-6px'
     label.style.marginRight = '-1px'
     button.appendChild(label)
